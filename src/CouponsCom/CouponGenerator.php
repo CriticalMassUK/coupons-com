@@ -13,6 +13,7 @@ class CouponGenerator implements LoggerAwareInterface
 {
     protected $logger;
     protected $CPTEndpoint = 'http://cpt.coupons.com/au/encodecpt.aspx';    
+    protected $couponEndpoint = 'http://bricks.couponmicrosite.net/javabricksweb/Index.aspx';
     protected $offerCode;
     protected $shortKey;
     protected $longKey;
@@ -57,12 +58,40 @@ class CouponGenerator implements LoggerAwareInterface
                 throw new CouponGeneratorException($field.' must be set');
             }
 
-            $params[$field] = $this->$field;
+            $params[$this->getParameterName($field)] = $this->$field;
         }
 
         $requestURL = $this->CPTEndpoint.'?'.http_build_query($params);
-        
-        throw new CouponGeneratorException($requestURL);
+        $response = file_get_contents($requestURL);
+
+        if (empty($response)) {
+            throw new CouponGeneratorException('Empty response from CPT endpoint');
+        }
+
+        $this->CPT = $response;
+
+        return $this->CPT;
+    }
+
+    protected function getParameterName($attributeName, $isCPT = false)
+    {
+        $translations = array(
+            'offerCode' => 'oc',
+            'shortKey' => 'sk',
+            'longKey' => 'lk',
+            'pin' => 'p'
+        );
+
+        // The CPT endpoint uses a different parameter name for offerCode
+        if ($isCPT === true) {
+            $translations['offerCode'] = 'o';
+        }
+
+        if (!array_key_exists($attributeName, $translations)) {
+            throw new CouponGeneratorException('Unknown attribute: '.$attributeName);
+        }
+
+        return $translations[$attributeName];
     }
 
     /* PSR-3 */
