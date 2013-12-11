@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./tests/bootstrap.php"
+         colors="true"
+         strict="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader">
+
+    <testsuites>
+        <testsuite name="Coupons.com Test Suite">
+            <directory>tests/CouponsCom</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>src</directory>
+        </whitelist>
+    </filter>
+
+    <logging>
+        <log type="coverage-html"
+             target="tests/CouponsCom/coverage"
+             charset="UTF-8"
+             yui="false"
+             highlight="true"
+             lowUpperBound="60"
+             highLowerBound="90" />
+    </logging>
+</phpunit>

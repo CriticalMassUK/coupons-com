@@ -1,4 +1,3 @@
-coupons-com
-===========
+# Coupons.com library
 
-A library to generate coupons using the coupons.com API
+A PHP library to generate coupons using the coupons.com API.
