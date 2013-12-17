@@ -24,7 +24,10 @@ class CouponGenerator implements LoggerAwareInterface
 
     public function getCouponURL()
     {
-        $this->generateCPT();
+        // For real life we generate the CPT, but for testing, we give it a fake one, yo.
+        if (empty($this->CPT)) {
+            $this->generateCPT();
+        }
 
         $requiredFields = array('offerCode', 'checkCode', 'pin', 'CPT', 'customerName');
         
@@ -62,6 +65,11 @@ class CouponGenerator implements LoggerAwareInterface
     public function setLongKey($longKey)
     {
         $this->longKey = $longKey;
+    }
+
+    public function setTestCPT($testCPT)
+    {
+        $this->CPT = $testCPT;
     }
 
     public function getCPT()

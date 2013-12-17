@@ -18,6 +18,7 @@ class CouponGeneratorTest extends PHPUnit_Framework_TestCase
         $generator->setCheckCode(COUPON_CHECK_CODE);
         $generator->setShortKey(COUPON_SHORT_KEY);
         $generator->setLongKey(COUPON_LONG_KEY);
+        $generator->setTestCPT('penguin');
         $generator->generatePin();
     
         $couponURL = $generator->getCouponURL();
