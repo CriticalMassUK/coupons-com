@@ -64,6 +64,16 @@ class CouponGenerator implements LoggerAwareInterface
         $this->longKey = $longKey;
     }
 
+    public function getCPT()
+    {
+        return $this->CPT;
+    }
+
+    public function getPin()
+    {
+        return $this->pin;
+    }
+
     protected function generateCPT() 
     {
         $requiredFields = array('offerCode', 'shortKey', 'longKey', 'pin');
