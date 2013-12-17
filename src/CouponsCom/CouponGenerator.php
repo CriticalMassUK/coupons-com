@@ -11,10 +11,12 @@ use Psr\Log\LoggerInterface;
  */
 class CouponGenerator implements LoggerAwareInterface
 {
+    protected $customerName;
     protected $logger;
     protected $CPTEndpoint = 'http://cpt.coupons.com/au/encodecpt.aspx';    
     protected $couponEndpoint = 'http://bricks.couponmicrosite.net/javabricksweb/Index.aspx';
     protected $offerCode;
+    protected $checkCode;
     protected $shortKey;
     protected $longKey;
     protected $pin;
@@ -23,7 +25,12 @@ class CouponGenerator implements LoggerAwareInterface
     public function getCouponURL()
     {
         $this->generateCPT();
-        return 'http://www.yahoo.ca';
+
+        $requiredFields = array('offerCode', 'checkCode', 'pin', 'CPT', 'customerName');
+        
+        $requestURL = $this->generateRequestURL($requiredFields, $this->couponEndpoint);
+
+        return $requestURL;
     }
 
     public function generatePIN()
@@ -32,9 +39,19 @@ class CouponGenerator implements LoggerAwareInterface
         return $this->pin;
     }
 
+    public function setCustomerName($customerName)
+    {
+        $this->customerName = $customerName;
+    }
+
     public function setOfferCode($offerCode)
     {
         $this->offerCode = $offerCode;
+    }
+
+    public function setCheckCode($checkCode)
+    {
+        $this->checkCode = $checkCode;
     }
 
     public function setShortKey($shortKey)
@@ -50,18 +67,9 @@ class CouponGenerator implements LoggerAwareInterface
     protected function generateCPT() 
     {
         $requiredFields = array('offerCode', 'shortKey', 'longKey', 'pin');
-        $params = array();
+        
+        $requestURL = $this->generateRequestURL($requiredFields, $this->CPTEndpoint);
 
-        foreach ($requiredFields as $field) {
-            if (empty($this->$field))
-            {
-                throw new CouponGeneratorException($field.' must be set');
-            }
-
-            $params[$this->getParameterName($field)] = $this->$field;
-        }
-
-        $requestURL = $this->CPTEndpoint.'?'.http_build_query($params);
         $response = file_get_contents($requestURL);
 
         if (empty($response)) {
@@ -73,13 +81,34 @@ class CouponGenerator implements LoggerAwareInterface
         return $this->CPT;
     }
 
+    protected function generateRequestURL($requiredFields, $endpointURL, $isCPT = false)
+    {
+        $params = array();
+
+        foreach ($requiredFields as $field) {
+            if (empty($this->$field))
+            {
+                throw new CouponGeneratorException($field.' must be set');
+            }
+
+            $params[$this->getParameterName($field, $isCPT)] = $this->$field;
+        }
+
+        $requestURL = $endpointURL.'?'.http_build_query($params);
+
+        return $requestURL;
+    }
+
     protected function getParameterName($attributeName, $isCPT = false)
     {
         $translations = array(
+            'customerName' => 'ct',
+            'checkCode' => 'cc',
             'offerCode' => 'oc',
             'shortKey' => 'sk',
             'longKey' => 'lk',
-            'pin' => 'p'
+            'pin' => 'p',
+            'CPT' => 'cpt'
         );
 
         // The CPT endpoint uses a different parameter name for offerCode
