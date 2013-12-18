@@ -11,7 +11,7 @@ use Psr\Log\LoggerInterface;
  */
 class CouponGenerator implements LoggerAwareInterface
 {
-    protected $customerName;
+    protected $customerName = 'Personalised Coupon';
     protected $logger;
     protected $CPTEndpoint = 'http://cpt.coupons.com/au/encodecpt.aspx';    
     protected $couponEndpoint = 'http://bricks.couponmicrosite.net/javabricksweb/Index.aspx';
@@ -24,7 +24,7 @@ class CouponGenerator implements LoggerAwareInterface
 
     public function getCouponURL()
     {
-        // For real life we generate the CPT, but for testing, we give it a fake one, yo.
+        // For real life we generate the CPT, but for testing, it can be set manually. 
         if (empty($this->CPT)) {
             $this->generateCPT();
         }
