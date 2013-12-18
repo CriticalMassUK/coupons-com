@@ -72,6 +72,11 @@ class CouponGenerator implements LoggerAwareInterface
         $this->CPT = $testCPT;
     }
 
+    public function setPin($pin)
+    {
+        $this->pin = $pin;
+    }
+
     public function getCPT()
     {
         return $this->CPT;
