@@ -126,8 +126,8 @@ class CouponGenerator implements LoggerAwareInterface
     {
         $translations = array(
             'customerName' => 'ct',
-            'checkCode' => 'cc',
-            'offerCode' => 'oc',
+            'checkCode' => 'c',
+            'offerCode' => 'o',
             'shortKey' => 'sk',
             'longKey' => 'lk',
             'pin' => 'p',

@@ -10,7 +10,7 @@ class CouponGeneratorTest extends PHPUnit_Framework_TestCase
     {
         $customerName = 'Dick Templeman';
         $offerCode = '123456';
-        $checkCode = 'oc';
+        $checkCode = 'o';
         $shortKey = 'shortkey';
         $longKey = 'longkey';
         $testCPT = 'penguin';
@@ -36,8 +36,8 @@ class CouponGeneratorTest extends PHPUnit_Framework_TestCase
         parse_str($couponURLParts[1], $couponURLParameters);
 
         $expectedOutput = array(
-            'oc' => $offerCode,
-            'cc' => $checkCode,
+            'o' => $offerCode,
+            'c' => $checkCode,
             'p' => $generator->getPin(),
             'cpt' => $generator->getCPT(),
             'ct' => $customerName
