@@ -91,8 +91,8 @@ class CouponGenerator implements LoggerAwareInterface
     {
         $requiredFields = array('offerCode', 'shortKey', 'longKey', 'pin');
         
-        $requestURL = $this->generateRequestURL($requiredFields, $this->CPTEndpoint);
-
+        $requestURL = $this->generateRequestURL($requiredFields, $this->CPTEndpoint, true);
+        
         $response = file_get_contents($requestURL);
 
         if (empty($response)) {
@@ -136,7 +136,7 @@ class CouponGenerator implements LoggerAwareInterface
 
         // The CPT endpoint uses a different parameter name for offerCode
         if ($isCPT === true) {
-            $translations['offerCode'] = 'o';
+            $translations['offerCode'] = 'oc';
         }
 
         if (!array_key_exists($attributeName, $translations)) {
